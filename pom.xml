@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2023-2025 Phase Five LLC.  For license terms, see LICENSE.txt in the repository root. -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.pfive</groupId>
+    <artifactId>access</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- This allows starting with mvn exec:java -->
+        <exec.mainClass>io.pfive.access.Main</exec.mainClass>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.0</version>
+                <configuration>
+                    <release>24</release>
+                    <enablePreview>true</enablePreview>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>io.pfive.access.Main</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Automatic-Module-Name>io.pfive.access</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <!-- Potentially use Maven Assembly plugin to create binary distribution (tar.bz) with dependencies. -->
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- Jetty HTTP Server. -->
+        <dependency>
+            <groupId>org.eclipse.jetty.http2</groupId>
+            <artifactId>jetty-http2-server</artifactId>
+            <version> 12.0.23</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-alpn-java-server</artifactId>
+            <version>12.0.23</version>
+        </dependency>
+        <!-- Utility classes for loading standard PEM certificate files into a Jetty server. -->
+        <dependency>
+            <groupId>io.github.hakky54</groupId>
+            <artifactId>sslcontext-kickstart-for-jetty</artifactId>
+            <version>9.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.hakky54</groupId>
+            <artifactId>sslcontext-kickstart-for-pem</artifactId>
+            <version>9.1.0</version>
+        </dependency>
+        <!-- Efficient streaming PNG reading and writing -->
+        <dependency>
+            <groupId>ar.com.hjg</groupId>
+            <artifactId>pngj</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <!-- Streamlined GTFS CSV Loading -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.12.0</version>
+        </dependency>
+        <!-- JSON Serialization -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.19.2</version>
+        </dependency>
+        <!-- Allows serializing Guava collections like Multimaps -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-guava</artifactId>
+            <version>2.19.2</version>
+        </dependency>
+        <!-- Logging API unifying logging across all libraries and this project. -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.17</version>
+        </dependency>
+        <!-- Reroutes the java.util.logging API to the SLF4J API. -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>2.0.17</version>
+        </dependency>
+        <!-- Performs logging in response to SLF4J API calls. -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.18</version>
+        </dependency>
+        <!-- Routing library -->
+        <dependency>
+            <groupId>com.conveyal</groupId>
+            <artifactId>r5</artifactId>
+            <version>v7.4</version>
+        </dependency>
+        <!-- Transitive dependencies of routing library (needed to call its API and handle responses) -->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-main</artifactId>
+            <version>25.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-geopkg</artifactId>
+            <version>25.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-geotiff</artifactId>
+            <version>25.2</version>
+        </dependency>
+        <!-- From here in Maven (unlike Gradle) the Geotools dependency will transitively bring in JTS -->
+        <dependency>
+            <groupId>com.wdtinc</groupId>
+            <artifactId>mapbox-vector-tile</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapdb</groupId>
+            <artifactId>mapdb</artifactId>
+            <version>1.0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.esotericsoftware</groupId>
+            <artifactId>kryo</artifactId>
+            <version>5.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.trove4j</groupId>
+            <artifactId>trove4j</artifactId>
+            <version>3.0.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+        <!-- Force protobuf version to newer one required by osmosis-osm-binary instead of mapbox-vector-tile -->
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.12.2</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <!-- Force checking Maven Central before other repos -->
+        <repository>
+            <id>central-first</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- Contains Geotools transitive dependency -->
+        <repository>
+            <id>osgeo</id>
+            <name>OSGeo</name>
+            <url>https://repo.osgeo.org/repository/release/</url>
+        </repository>
+        <!-- Contains Polyline transitive dependency -->
+        <repository>
+            <id>conveyal</id>
+            <name>Conveyal</name>
+            <url>https://maven.conveyal.com</url>
+        </repository>
+    </repositories>
+</project>

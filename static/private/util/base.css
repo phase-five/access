@@ -1,0 +1,169 @@
+/* Copyright 2023-2025 Phase Five LLC.  For license terms, see LICENSE.txt in the repository root. */
+
+/*
+  The CSS content box is surrounded by padding, then a border, then a margin.
+  In the CSS box model, width and height apply by default to the content box, with padding and
+  border added outside the content. The `box-sizing` property can override this to set the size of
+  the combined content plus padding and border. However, no combination of these settings ever
+  seems to prevent the top level boxes from slightly overhanging the window and being scrollable.
+  Adding `overflow: clip` or `overflow: hidden` to the body element seems to keep it from
+  overflowing and scrolling by a few pixels. However, adding 'overflow: clip' here sometimes
+  prevents children from scrolling even when they have explicit 'overflow: scroll'.
+*/
+html {
+    box-sizing: border-box;
+    padding: 0px; border: 0px; margin: 0px;
+    height: 100vh; width: 100vw; max-height: 100vh; max-width: 100vw;
+}
+
+body {
+    font-family: Helvetica, Sans-Serif;
+    box-sizing: border-box;
+    overflow: hidden; /* This seems to be the only thing that keeps the top level from scrolling */
+    padding: 2px; border: 0px; margin: 0px;
+    height: 100vh; width: 100vw; max-height: 100vh; max-width: 100vw;
+}
+
+/* Tables have alternating light and dark rows. */
+table { border-collapse: collapse; width: 98% }
+table tr:nth-child(even) { background-color: #f0f0f0; }
+thead { border-bottom: 1px solid black; }
+tfoot { border-top: 1px solid black; }
+tbody tr:nth-child(even) { background-color: #f0f0f0; }
+td, th { padding: 3px; }
+
+/* Items waiting to be saved, and those modified but already saved, are a different color. */
+/* TODO Factor out of scenario grid so it's uniform across components. */
+tr.modified { background-color: rgb(220, 250, 220); }
+tr:nth-child(even).modified { background-color: rgb(200, 230, 200); }
+tr.unsaved { background-color: rgb(250, 220, 220); }
+tr:nth-child(even).unsaved { background-color: rgb(230, 200, 200); }
+
+/* Remove as much OS and browser-specific styling as possible from common input elements. */
+input[type="email"],
+input[type="password"],
+input[type="range"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+textarea,
+slider,
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-shadow: none;
+    box-sizing: inherit;
+    padding: 5px;
+    width: 96%;
+    border-radius: 0;
+    background: #eee;
+    min-height: 1lh;
+}
+
+input[type="date"],
+input[type="time"] {
+    height: 1rem;
+}
+
+/*
+  Progress bars are either horribly vendor-specific or perfectly matched to OS conventions, depending on point of view.
+  Some browsers automatically animate smooth transitions. The webkit section will make Chrome and Safari do the same.
+  These animation effects won't apply unless you also set `appearance: none`.
+  Note that the animation happens after the value updates, so with pull (polling) updates, even with transitions the
+  transitions are incorrect without extrapolating forward. Experimentation showed this never really looks right unless
+  you use frequent push updates. Progress bar styling should be kept minimal, as it is basically a timesink and does
+  not directly affect functionality.
+*/
+progress {
+    -webkit-appearance: none;
+    height: 1rem;
+    width: 96%;
+}
+
+progress::-webkit-progress-bar {
+    background-color: #eeeeee;
+}
+
+/*
+  With frequent push updates to progress bars, transition time should be very short (equal to the
+  minimum time between push updates) or there should be none at all.
+*/
+progress::-webkit-progress-value {
+    background-color: #8182cc;
+    transition: width 100ms ease-in-out;
+}
+
+/* H3 is used to separate sections of input forms and settings panels. */
+h3 {
+    overflow: hidden;
+    font-size: 11pt;
+    font-style: normal;
+    font-weight: bold;
+}
+
+/* Black mid-height full-width line after H3 headings. */
+h3::after {
+    background-color: #000;
+    content: "";
+    display: inline-block;
+    height: 2px;
+    position: relative;
+    vertical-align: middle;
+    width: 100%;
+    left: 0.5em;
+    margin-right: -50%;
+}
+
+/* If labels are too large, they affect the layout of forms and control panels. */
+label {
+    font-size: 11pt;
+}
+
+/* Buttons extend all the way across vertically stacked control panel elements. */
+button {
+    width: 99%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+/* The custom tags below follow custom element conventions only for CSS styling, with no JS code. */
+
+v-stack {
+    display: flex;
+    flex-flow: column nowrap;
+    overflow: scroll;
+}
+
+v-stack.column {
+    width: 50%;
+    margin-right: 0.5em;
+    min-width: 27em;
+    max-width: 50em;
+    overflow: scroll;
+}
+
+h-stack {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+/* This is for placing labels and text or select inputs side by side in a column. */
+grid-form {
+    background-color: #ffffff;
+    display: grid;
+    grid-template-columns: 12ch auto;
+    align-items: center;
+}
+
+/* For text showing a warning to the user, typically that some page is an incomplete prototype. */
+warn {
+    background-color: #fbd0d0;
+    font-style: normal;
+    padding: 2px;
+}
+
+/* Enable multi-page smooth transitions (only in Chrome and Edge as of 2024-08-22). */
+@view-transition {
+    navigation: auto;
+}

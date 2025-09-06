@@ -1,0 +1,121 @@
+<!-- Copyright 2023-2025 Phase Five LLC.  For license terms, see LICENSE.txt in the repository root. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Travel Time Raster Map</title>
+    <link rel="stylesheet" href="../util/base.css">
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css">
+    <script type="module" src="analyze.js"></script>
+</head>
+<body>
+    <nav-bar highlight="analyze"></nav-bar>
+    <!-- The map does not render unless it and its enclosing tag have height and width of 100%. -->
+    <h-stack style="height: 100%; width: 100%;">
+        <v-stack style="width: 24em; min-width: 24em;">
+            <file-select type="network" id="network-select"></file-select>
+            <file-select type="egress" id="egress-select"></file-select>
+            <h-stack>
+                <input type="date" select id="date-select" value="2025-04-25">
+                <input type="time" select id="time-select" value="07:00">
+                <label>plus
+                    <select id="window-select" class="select" style="width: 4em">
+                        <option value="30">0:30</option>
+                        <option value="60" selected>1:00</option>
+                        <option value="120">2:00</option>
+                        <option value="240">4:00</option>
+                    </select>
+                </label>
+                <label>max dur
+                    <select id="duration-select" class="select" style="width: 4em">
+                        <option value="30">0:30</option>
+                        <option value="60" selected>1:00</option>
+                        <option value="90">1:30</option>
+                        <option value="120">2:00</option>
+                    </select>
+                </label>
+            </h-stack>
+            <details>
+                <summary>Modes of Travel</summary>
+                <mode-select type="transit" id="transit-mode-select">Transit Modes</mode-select>
+                <mode-select type="street" id="street-mode-select">Access/Direct Modes</mode-select>
+                <mode-select type="street" id="egress-mode-select">Egress Modes</mode-select>
+            </details>
+            <access-display></access-display>
+            <decay-select></decay-select>
+            <details>
+                <summary>Time</summary>
+                <select id="time-color-ramp-select" class="select">
+                    <option value="transparent" selected="true">Transparent</option>
+                    <option value="color-bands">Color Bands</option>
+                    <option value="alpha-bands-3">Alpha Bands (3)</option>
+                    <option value="alpha-bands-4">Alpha Bands (4)</option>
+                    <option value="green">Green</option>
+                    <option value="bands">Bands</option>
+                </select>
+                <output id="travel-time-output">TIME</output>
+                <input type="range" min="1" max="115" step="0.1" value="30" class="slider" id="travel-time-slider">
+                <output id="percentile-output">PERCENTILE</output>
+                <input type="range" min="0" max="2" step="0.01" value="1" class="slider" id="percentile-slider">
+            </details>
+            <details>
+                <summary>Destinations</summary>
+                <file-select type="grid" id="dest-select-a"></file-select>
+                <destination-select id="dest-legend-a"></destination-select>
+                <select id="color-select-a" class="select">
+                    <option value="red" selected="true">Red</option>
+                    <option value="red-blue">Red-Blue</option>
+                    <option value="blue">Blue</option>
+                    <option value="blue-green">Blue-Green</option>
+                    <option value="green">Green</option>
+                    <option value="rgb">RGB</option>
+                    <option value="spectrum">Spectrum</option>
+                    <option value="none">None</option>
+                </select>
+                <input type="range" min="0" max="2000" step="10" value="100" class="slider" id="scale-slider-a">
+                <file-select type="grid" id="dest-select-b"></file-select>
+                <destination-select id="dest-legend-b"></destination-select>
+                <select id="color-select-b" class="select">
+                    <option value="red" selected="true">Red</option>
+                    <option value="red-blue">Red-Blue</option>
+                    <option value="blue" >Blue</option>
+                    <option value="blue-green">Blue-Green</option>
+                    <option value="green">Green</option>
+                    <option value="rgb">RGB</option>
+                    <option value="spectrum">Spectrum</option>
+                    <option value="none">None</option>
+                </select>
+                <input type="range" min="0" max="2000" step="10" value="100" class="slider" id="scale-slider-b">
+            </details>
+            <details>
+                <summary>Map Layers</summary>
+                <map-layers></map-layers>
+            </details>
+            <details>
+                <summary>Multi-Origin Batch</summary>
+                <label>
+                    Origin Points
+                    <file-select type="grid,point" id="batch-origin-select"></file-select>
+                </label>
+                <label>
+                    Filtering
+                    <select id="batch-origin-filter" class="select">
+                        <option value="-1" selected="true">All points (no filtering)</option>
+                        <option value="0">Only points with nonzero density</option>
+                        <option value="1">Points adjacent to nonzero density</option>
+                    </select>
+                </label>
+                <label>
+                    Destination Points
+                    <file-select type="grid,point" id="batch-dest-select"></file-select>
+                </label>
+                <button type='button' id='launch-batch-button' style="height: 1.5em; margin: 2px">Launch Batch</button>
+            </details>
+            <progress-bars></progress-bars>
+            <status-messages></status-messages>
+        </v-stack>
+        <div id="map" style="height: 100%; width: 100%;"></div>
+    </h-stack>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!-- Copyright 2023-2025 Phase Five LLC.  For license terms, see LICENSE.txt in the repository root. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Batch Results</title>
+  <link rel="stylesheet" href="../util/base.css">
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css">
+  <script type="module" src="results.js"></script>
+</head>
+
+<body>
+  <nav-bar highlight="results"></nav-bar>
+  <h-stack style="height: 100%; width: 100%;">
+    <v-stack style="width: 24em; min-width: 24em; height: 100%;">
+      <file-select type="batch" id="batch-select"></file-select>
+      <select id="percentile-select">
+        <option value="1">Minimum</option>
+        <option value="50" selected="true">Median</option>
+        <option value="99">Maximum</option>
+      </select>
+      <select id="time-select">
+        <option value="30">30 minutes</option>
+        <option value="45" selected="true">45 minutes</option>
+        <option value="60">60 minutes</option>
+      </select>
+      <button id="download-button">Download all GeoTIFFs</button>
+      <raster-control layer="results"></raster-control>
+      <h3>Map Layers</h3>
+      <map-layers></map-layers>
+      <progress-bars></progress-bars>
+      <status-messages></status-messages>
+    </v-stack>
+    <div id="map" style="width: 100%; height: 100%"></div>
+  </h-stack>
+</body>
+</html>

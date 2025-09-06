@@ -1,0 +1,84 @@
+<!-- Copyright 2023-2025 Phase Five LLC.  For license terms, see LICENSE.txt in the repository root. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Log In</title>
+  <style>
+      .loginPanel {
+          margin: auto;
+          height: 60%; width: 60%;
+      }
+  </style>
+</head>
+<body style="font-family: Helvetica, Sans-Serif; background-color: #426373;">
+<div style="height: 100vh; width: 100vw; display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr;">
+  <div class="loginPanel" style="background-color: #eeeeee; padding: 1em; grid-column: 2; grid-row: 2">
+    <form>
+      <!-- https://stackoverflow.com/a/66201596/778449 Enter to trigger submit (in forms) -->
+      <label>email:<br><input type="email" id="emailField" tabindex="0"></label><br>
+      <label>password:<br><input type="password" id="passwordField" tabindex="0" autofocus></label><br>
+      <input type="submit" id="logInButton" tabindex="0" value="Log In">
+    </form>
+    <p id="messagesArea"></p>
+  </div>
+</div>
+</body>
+</html>
+
+<script>
+  "use strict";
+
+  // see https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem
+  function unicodeStringToBase64 (s) {
+    let uint8Array = new TextEncoder().encode(s);
+    let binString = String.fromCodePoint(...uint8Array);
+    return btoa(binString);
+  }
+
+  let emailField = document.getElementById("emailField");
+  let passwordField = document.getElementById("passwordField");
+  let messagesArea = document.getElementById("messagesArea");
+
+  let storedEmail = window.localStorage.getItem("email");
+  if (storedEmail) {
+    emailField.value = storedEmail;
+  }
+
+  document.getElementById("logInButton").onclick = function (e) {
+    // Prevent form submit from actually submitting a form.
+    // We're using a form just to get tab/enter behavior.
+    e.preventDefault();
+    // fetch token, store and redirect
+    let email = emailField.value;
+    let password = passwordField.value;
+    // TODO validate email/username and password
+    let authHeaderValue = "Basic " + unicodeStringToBase64(`${email}:${password}`);
+    let url = "./token";
+    let fetchOptions = {
+      method: "GET",
+      headers: new Headers({
+        "Authorization": authHeaderValue
+      })
+    };
+    // You can't directly log Headers objects, you have to use spread or construct a Map from them.
+    // console.log(new Map(fetchOptions.headers));
+    fetch(url, fetchOptions).then(response => {
+      if (response.status == 200) {
+        response.text().then(text => {
+          window.localStorage.setItem("token", text);
+          window.localStorage.setItem("email", email);
+          // Redirect to location within authenticated static content (relative URL /static).
+          window.location = "static/pages/upload.html";
+        })
+      } else {
+        messagesArea.innerText = response.statusText;
+        response.text().then(text => {
+          messagesArea.innerText += '\n' + text;
+        });
+      }
+    });
+  };
+
+</script>

@@ -1,0 +1,17 @@
+/target/
+/conf/
+/library/
+/docs/
+/static/private/png/
+/runtime/
+
+nohup.out
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Mac OS ###
+.DS_Store

@@ -1,0 +1,38 @@
+<!-- Copyright 2023-2025 Phase Five LLC.  For license terms, see LICENSE.txt in the repository root. -->
+
+<configuration>
+    <!-- Hide logback's output about itself at startup. -->
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+    <!--
+       The R5 JAR contains a logback.xml. When logback detects multiple config files on the classpath it will log a
+       warning, which also causes it to enable its own INFO level log messages. The real solution is to not include
+       logback.xml in library JARs. This can also be fixed by explicitly specifying the logging config to the JVM with
+       -Dlogback.configurationFile=conf/logback.xml
+    -->
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- STDOUT will use a PatternLayoutEncoder by default. -->
+        <!-- Do not include line numbers. Logback documentation indicates that this is inefficient. -->
+        <encoder><pattern>%date [%thread] %-5level %logger{10} - %msg%n</pattern></encoder>
+    </appender>
+
+    <appender name="SSEVENT" class="io.pfive.access.sparse.ServerSentEventLogAppender">
+        <encoder><pattern>%msg</pattern></encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="SSEVENT" />
+    </root>
+
+    <logger name="com.conveyal.r5.analyst.LinkageCache" level="WARN" />
+    <logger name="com.conveyal.r5.analyst.TravelTimeComputer" level="WARN" />
+    <logger name="com.conveyal.r5.profile.FastRaptorWorker" level="WARN" />
+    <logger name="com.conveyal.r5.streets.StreetRouter" level="WARN" />
+    <logger name="com.conveyal.r5.profile.ExecutionTimer" level="WARN" />
+
+    <!-- For some reason Jetty is not filtered by the root logger setting, and its debug logging is very noisy.  -->
+    <logger name="org.eclipse.jetty" level="INFO" />
+
+</configuration>

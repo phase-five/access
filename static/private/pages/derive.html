@@ -1,0 +1,82 @@
+<!-- Copyright 2023-2025 Phase Five LLC.  For license terms, see LICENSE.txt in the repository root. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Derive from Files</title>
+  <link rel="stylesheet" href="../util/base.css">
+  <script type="module" src="derive.js"></script>
+</head>
+<body>
+  <nav-bar highlight="derive"></nav-bar>
+  <h-stack>
+    <v-stack class="column">
+
+      <h3>Build Network</h3>
+      <grid-form>
+        <label for="build-gtfs-select">GTFS Transit</label>
+        <file-list type="gtfs" display="checkbox" id="build-gtfs-select"></file-list>
+        <label for="build-osm-select">OSM Streets</label>
+        <file-select type="osmpbf" id="build-osm-select"></file-select>
+        <label for="build-name-text">Short Name</label>
+        <textarea id="build-name-text" rows="1" cols="100" maxlength="100" required="true"></textarea>
+        <label for="build-detail-text">Detail Text</label>
+        <textarea id="build-detail-text" rows="1" cols="100"></textarea>
+      </grid-form>
+      <button id="build-button">Build Network</button>
+
+      <h3>Import Features from GeoPackage</h3>
+      <grid-form>
+        <label for="gpkg-network-select">Bounds</label>
+        <file-select type="network" id="gpkg-network-select"></file-select>
+        <label for="gpkg-file-select">Geopackage</label>
+        <file-select type="geopackage" id="gpkg-file-select"></file-select>
+        <label for="gpkg-prop-select">Property</label>
+        <geoproperty-select id="gpkg-prop-select"></geoproperty-select>
+        <label for="gpkg-points-select">Point/Raster</label>
+        <select id="gpkg-points-select">
+          <option value="false">Rasterize into 100m grid</option>
+          <option value="true">Exact points or centroids</option>
+        </select>
+        <label for="gpkg-name-text">Short Name</label>
+        <textarea id="gpkg-name-text" rows="1" cols="100" maxlength="100" required="true"></textarea>
+        <label for="gpkg-detail-text">Detail Text</label>
+        <textarea id="gpkg-detail-text" rows="1" cols="100"></textarea>
+      </grid-form>
+      <button id="gpkg-import-button">Import GeoPackage</button>
+
+      <h3>Precompute Egress</h3>
+      <grid-form>
+        <label for="egress-network-select">Network</label>
+        <file-select type="network" id="egress-network-select"></file-select>
+        <label for="egress-name-text">Short Name</label>
+        <textarea id="egress-name-text" rows="1" cols="100" maxlength="100" required="true"></textarea>
+        <label for="egress-detail-text">Detail Text</label>
+        <textarea id="egress-detail-text" rows="1" cols="100"></textarea>
+        <label for="egress-mode-select">Mode</label>
+        <select id="egress-mode-select">
+          <option value="WALK">Walk</option>
+          <option value="BICYCLE">Bicycle</option>
+        </select>
+        <label for="egress-distance-select">Distance</label>
+        <select id="egress-distance-select">
+          <option value="100">200 meters</option>
+          <option value="500">500 meters</option>
+          <option value="1000">1.0 km</option>
+          <option value="1500">1.5 km</option>
+          <option value="2000">2.0 km</option>
+        </select>
+      </grid-form>
+      <button id="egress-button">Build Egress Tiles</button>
+
+    </v-stack>
+    <v-stack class="column">
+      <h3>File Library</h3>
+      <file-list type="grid,network,point,egress" display="table" id="file-list"></file-list>
+      <progress-bars></progress-bars>
+      <status-messages></status-messages>
+    </v-stack>
+  </h-stack>
+</body>
+</html>

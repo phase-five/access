@@ -1,0 +1,27 @@
+<!-- Copyright 2023-2025 Phase Five LLC.  For license terms, see LICENSE.txt in the repository root. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Files</title>
+  <link rel="stylesheet" href="../util/base.css">
+  <script type="module" src="upload.js"></script>
+</head>
+<body>
+  <nav-bar highlight="upload"></nav-bar>
+  <h-stack>
+    <v-stack class="column">
+      <h3>Upload Files</h3>
+      <input type="file" id="file-input" multiple>
+      <input type="button" value="Upload" id="upload-button">
+      <progress-bars></progress-bars>
+      <status-messages></status-messages>
+    </v-stack>
+    <v-stack class="column">
+      <h3>File Library</h3>
+      <file-list display="table" type="OSMPBF,GTFS,GEOPACKAGE"></file-list>
+    </v-stack>
+  </h-stack>
+</body>
+</html>
