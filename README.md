@@ -102,7 +102,9 @@ The Java backend is coded directly against the Jetty HTTP server with no framewo
 
 The frontend is coded "on the platform" of ECMAScript, HTML custom elements, and standard web APIs, with absolutely no build tools, transpilers, or package tools and only one dependency (retrieved at runtime via CDN). It is served as plain static files by the same Jetty server providing the backend API, facilitating debugging and avoiding complexity from mechanisms like CORS. It is a multi-page app that reuses custom elements to maintain visual and functional consistency across pages.
 
-File formats and interfaces have been chosen to provide the most interoperability and functionality with the least code paths and dependencies on external services, in hopes that maintenance and experimentation will be manageable and pleasant even for small teams.
+As of the first point release, the entire Java backend was around 570KB of source code, and the frontend around 250KB, including a substantial amount of comments.
+
+File formats and interfaces have been chosen selectively to ensure interoperability with desktop GIS software while limiting the number of code paths and dependencies on external services, in hopes that maintenance and experimentation will be manageable and pleasant even for small teams.
 
 Coding style generally aims to be direct and procedural, facilitating understanding and modification by people unfamiliar with frontend frameworks as well as developers coming from other engineering and scientific computing domains.
 
